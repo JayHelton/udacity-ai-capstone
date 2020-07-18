@@ -120,14 +120,13 @@ def _prepare_and_train(data_directory, save_dir, arch, learning_rate, hidden_uni
     _test_nn(model, testloader, device)
 
         # Ideas from udacity community boards
-    checkpoint = {'model_used': 'vgg19',
-                'input_size': 25088,
-                'output_size': 102,
-                'features': model.features,
-                'classifier': model.classifier,
-                'optimizer': optimizer.state_dict(),
-                'state_dict': model.state_dict(),
-                'idx_to_class': {v: k for k, v in train_datasets.class_to_idx.items()}
+    checkpoint = {
+                    'model_used': arch,
+                    'input_size': 25088,
+                    'output_size': 102,
+                    'classifier': model.classifier,
+                    'state_dict': model.state_dict(),
+                    'idx_to_class': {v: k for k, v in train_datasets.class_to_idx.items()}
                 }
 
     torch.save(checkpoint, f'{save_dir}/model_checkpoint.pth')

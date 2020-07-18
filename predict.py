@@ -1,4 +1,5 @@
 import argparse
+import sys
 import numpy as np
 import random
 from os import listdir
@@ -17,11 +18,12 @@ from common import model_dicts, common_transform
 
 def _get_model_from_checkpoint(checkpoint_path):
     model_info = torch.load('model_checkpoint.pth')
-    model_to_use = model_dicts[model_info['model']]
+    model_to_use = model_dicts[model_info['model_used']]
+    model = model_to_use.get("model")
 
-    model_to_use.classifier = model_info['classifier']
-    model_to_use.load_state_dict(model_info['state_dict'])
-    return model_to_use
+    model.classifier = model_info['classifier']
+    model.load_state_dict(model_info['state_dict'])
+    return model
 
 
 def _process_image(image):
