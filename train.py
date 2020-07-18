@@ -82,7 +82,7 @@ def _prepare_and_train(data_directory, save_dir, arch, learning_rate, hidden_uni
     for e in range(epochs):
         r_loss = 0
 
-        for ii, (inputs, labels) in enumerate(trainloader):
+        for inputs, labels in trainloader:
             steps += 1
 
             inputs, labels = inputs.to(device), labels.to(device)
