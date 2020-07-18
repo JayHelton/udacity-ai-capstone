@@ -148,6 +148,7 @@ def _get_arguments(sys_args):
     parser.add_argument(
         "--arch",
         default="vgg19",
+        choices=['vgg19', 'densenet121'],
         help="Trained Model to Use",
     )
 

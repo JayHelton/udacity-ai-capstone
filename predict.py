@@ -4,7 +4,6 @@ import numpy as np
 import random
 from os import listdir
 import json
-import matplotlib.pyplot as plt
 
 import torch
 from torchvision import datasets
@@ -37,7 +36,7 @@ def _process_image(image):
     return np_img.transpose((0, 1, 2))
 
 
-def _predict(image_path, checkpoint_path, gpu):
+def _predict(image_path, checkpoint_path, gpu, top_k):
     device = torch.device("cuda" if gpu and torch.cuda.is_available() else "cpu")
     model = _get_model_from_checkpoint(checkpoint_path)
     with torch.no_grad():
@@ -48,7 +47,7 @@ def _predict(image_path, checkpoint_path, gpu):
         
         outputs = model(image.to(device))
                 
-        probability, classes = torch.exp(outputs).topk(topk)
+        probability, classes = torch.exp(outputs).topk(top_k)
         return probability[0].tolist(), classes[0].add(1).tolist()
 
 
@@ -59,26 +58,12 @@ def _predict_and_show(image_path, checkpoint_path, top_k, category_names, gpu):
         cat_to_name = json.load(f)
 
     print("Image submitted:", image_path)
-    probability, classes = _predict(image_path, checkpoint_path, gpu)
+    probability, classes = _predict(image_path, checkpoint_path, gpu, top_k)
+    print(f'Top {top_k} Predictions')
+    class_outputs = [ f"{cat_to_name[str(c)]} ({str(c)}) - {round(p * 100, 3)}%" for c, p in zip(classes, probability)]
+    for output in class_outputs:
+        print(output)
 
-    classes_labels = [ f"{cat_to_name[str(c)]} ({str(c)})" for c in classes]
-
-    image = Image.open(image_path)
-    fig, ax = plt.subplots(2,1)
-
-    ax[0].imshow(image);
-
-    y_positions = np.arange(len(classes_labels))
-
-    ax[1].barh(y_positions,probability,color='blue')
-
-    ax[1].set_yticks(y_positions)
-    ax[1].set_yticklabels(classes_labels)
-
-    ax[1].invert_yaxis()  
-
-    ax[1].set_xlabel('Accuracy (%)')
-    ax[0].set_title(f'Top {top_k} Predictions')
 
 
 def _get_arguments(sys_args):
