@@ -23,6 +23,7 @@ def _get_model(arch, hidden_units):
     classifier = nn.Sequential(OrderedDict([
                         ('fc1', nn.Linear(model_to_use.get("input"), h)), 
                         ('relu', nn.ReLU()),
+                        ('do1', nn.Dropout(p=0.2)),
                         ('fc2', nn.Linear(4096, 102)),
                         # use softmax to get probability of the 102 output classes
                         ('output', nn.LogSoftmax(dim=1))
