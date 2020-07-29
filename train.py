@@ -135,7 +135,7 @@ def _prepare_and_train(data_directory, save_dir, arch, learning_rate, hidden_uni
 
 def _get_arguments(sys_args):
     parser = argparse.ArgumentParser(
-        description="Submitting measurement sets to the Submissions API."
+        description="Training NN"
     )
 
     parser.add_argument("data_directory")
