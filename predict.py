@@ -68,7 +68,7 @@ def _predict_and_show(image_path, checkpoint_path, top_k, category_names, gpu):
 
 def _get_arguments(sys_args):
     parser = argparse.ArgumentParser(
-        description="Submitting measurement sets to the Submissions API."
+        description="Testing NN"
     )
 
     parser.add_argument("image_path")
